@@ -1,0 +1,18 @@
+IMMEDIATE ACTION ITEMS — Project Alpha
+======================================
+
+Priority 1 (Do today):
+- Write 500 words of introduction — focus on motivation and problem statement
+- Email Dr. Johnson to confirm experiment timeline
+
+Priority 2 (This week):
+- Complete literature review section
+- Set up LaTeX template for ICML submission format
+- Create figures for the attention mechanism diagram
+
+Priority 3 (Next week):
+- Run ablation studies on smaller dataset
+- Draft related work section
+
+Deadline reminder: March 15 — 18 days away
+Status: ON TRACK if introduction is written this week
