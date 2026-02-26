@@ -323,9 +323,9 @@ with tab_agent:
                     )
                     status.update(label="Error", state="error")
 
-                except Exception:
+                except Exception as e:
                     st.session_state.error_msg = (
-                        "**An unexpected error occurred.**\n\n"
+                        f"**An unexpected error occurred:** `{type(e).__name__}: {e}`\n\n"
                         "Please try again. If the problem persists, "
                         "check your PARA folder permissions and API key."
                     )
