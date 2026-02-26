@@ -52,67 +52,17 @@ st.title("🤖 Personal AI Execution Assistant")
 st.markdown("*AI-powered decision support for knowledge workers*")
 
 st.markdown(
-    "Tell this assistant where your PARA knowledge base lives and ask it what to work on. "
+    "Ask it what to work on. "
     "It semantically searches your knowledge base, reasons about priorities, and returns one clear recommendation."
 )
 st.markdown("---")
 
-# ── Configuration (collapsed by default) ─────────────────────────────────────
-with st.expander("⚙️ Configuration", expanded=not st.session_state.para_path):
-    st.caption(
-        "Set your PARA folder path, Gemini API key, and Qdrant connection once. "
-        "Stored for this session only — never uploaded anywhere."
-    )
-    para_input = st.text_input(
-        "PARA Root Directory Path",
-        value=st.session_state.para_path,
-        placeholder="e.g.  C:/Users/you/Documents/PARA   or   /home/you/PARA",
-        help=(
-            "The folder that contains your Projects/, Areas/, and Resources/ sub-folders. "
-            "Only .md and .txt files are indexed. Archive/ is always skipped."
-        ),
-    )
-    api_key_input = st.text_input(
-        "Gemini API Key",
-        value=st.session_state.api_key,
-        type="password",
-        placeholder="AIza...",
-        help="Your Google Gemini API key. Get one free at https://aistudio.google.com/app/apikey",
-    )
-
-    st.markdown("**Qdrant Vector Database**")
-    col_url, col_key = st.columns([3, 2])
-    with col_url:
-        qdrant_url_input = st.text_input(
-            "Qdrant Cluster URL",
-            value=st.session_state.qdrant_url,
-            placeholder="https://xxx.cloud.qdrant.io:6333",
-            help="Your Qdrant Cloud cluster URL.",
-        )
-    with col_key:
-        qdrant_key_input = st.text_input(
-            "Qdrant API Key",
-            value=st.session_state.qdrant_api_key,
-            type="password",
-            placeholder="eyJ...",
-            help="Your Qdrant Cloud API key.",
-        )
-
-    if st.button("Save Configuration", type="secondary"):
-        st.session_state.para_path      = para_input.strip()
-        st.session_state.api_key         = api_key_input.strip()
-        st.session_state.qdrant_url      = qdrant_url_input.strip()
-        st.session_state.qdrant_api_key  = qdrant_key_input.strip()
-        st.success("Configuration saved for this session.")
-
-st.markdown("")
 
 # ── Sync Knowledge Base ───────────────────────────────────────────────────────
 st.subheader("📂 Knowledge Base")
 
-# Resolve live config values (prefer what's typed, fall back to session state)
-_resolved_qurl = qdrant_url_input.strip() or st.session_state.qdrant_url
-_resolved_qkey = qdrant_key_input.strip() or st.session_state.qdrant_api_key
+_resolved_qurl = st.session_state.qdrant_url
+_resolved_qkey = st.session_state.qdrant_api_key
 
 # Show current index stats
 try:
@@ -139,10 +89,10 @@ with col_reindex:
 
 if sync_btn or reindex_btn:
     force = bool(reindex_btn)
-    resolved_para = para_input.strip() or st.session_state.para_path
-    resolved_key  = api_key_input.strip() or st.session_state.api_key
-    resolved_qurl = qdrant_url_input.strip() or st.session_state.qdrant_url
-    resolved_qkey = qdrant_key_input.strip() or st.session_state.qdrant_api_key
+    resolved_para = st.session_state.para_path
+    resolved_key  = st.session_state.api_key
+    resolved_qurl = st.session_state.qdrant_url
+    resolved_qkey = st.session_state.qdrant_api_key
 
     key_ok,  key_err  = validate_api_key(resolved_key)
     path_ok, path_err = validate_para_path(resolved_para)
@@ -244,10 +194,10 @@ with tab_agent:
         st.session_state.warnings = []
         st.session_state.error_msg = ""
 
-        resolved_para = para_input.strip() or st.session_state.para_path
-        resolved_key  = api_key_input.strip() or st.session_state.api_key
-        resolved_qurl = qdrant_url_input.strip() or st.session_state.qdrant_url
-        resolved_qkey = qdrant_key_input.strip() or st.session_state.qdrant_api_key
+        resolved_para = st.session_state.para_path
+        resolved_key  = st.session_state.api_key
+        resolved_qurl = st.session_state.qdrant_url
+        resolved_qkey = st.session_state.qdrant_api_key
 
         if not query.strip():
             st.session_state.error_msg = (
@@ -261,17 +211,17 @@ with tab_agent:
             if not key_ok:
                 st.session_state.error_msg = (
                     f"**API Key missing or invalid:** {key_err}\n\n"
-                    "Open the ⚙️ Configuration section above and enter your Gemini API key."
+                    "Check that your GEMINI_API_KEY secret is set correctly."
                 )
             elif not path_ok:
                 st.session_state.error_msg = (
                     f"**PARA path error:** {path_err}\n\n"
-                    "Open the ⚙️ Configuration section above and check the directory path."
+                    "Check that your PARA_ROOT_PATH secret points to a valid directory."
                 )
             elif not q_ok:
                 st.session_state.error_msg = (
                     f"**Qdrant configuration error:** {q_err}\n\n"
-                    "Open the ⚙️ Configuration section above and check your Qdrant credentials."
+                    "Check that your QDRANT_URL and QDRANT_API_KEY secrets are set correctly."
                 )
             else:
                 status = st.status("Analysing your knowledge base…", expanded=True)
@@ -320,7 +270,7 @@ with tab_agent:
                     if "api key" in err.lower():
                         st.session_state.error_msg = (
                             "**Gemini API key is missing.**\n\n"
-                            "Open the ⚙️ Configuration section and enter your API key."
+                            "Check that your GEMINI_API_KEY secret is set correctly."
                         )
                     elif "no projects" in err.lower():
                         st.session_state.error_msg = (
@@ -342,7 +292,7 @@ with tab_agent:
                     elif "api key rejected" in err.lower() or "key rejected" in err.lower():
                         st.session_state.error_msg = (
                             "**API key rejected by Google.**\n\n"
-                            "Please check your Gemini API key in the ⚙️ Configuration section."
+                            "Please check that your GEMINI_API_KEY secret is valid."
                         )
                     elif "timed out" in err.lower() or "timeout" in err.lower():
                         st.session_state.error_msg = (
@@ -385,9 +335,8 @@ with tab_agent:
     if not st.session_state.submitted:
         st.markdown("#### Getting started")
         st.markdown(
-            "1. Open **⚙️ Configuration** above — enter your PARA path, Gemini key, and Qdrant credentials\n"
-            "2. Click **🔄 Sync Knowledge Base** to index your files into Qdrant\n"
-            "3. Type your question and click **Get Recommendation**"
+            "1. Click **🔄 Sync Knowledge Base** above to index your files into Qdrant\n"
+            "2. Type your question and click **Get Recommendation**"
         )
 
     elif st.session_state.error_msg:
@@ -468,9 +417,9 @@ with tab_notes:
         elif not note_body.strip():
             st.warning("Please write something in the note before saving.")
         else:
-            resolved_key  = api_key_input.strip() or st.session_state.api_key
-            resolved_qurl = qdrant_url_input.strip() or st.session_state.qdrant_url
-            resolved_qkey = qdrant_key_input.strip() or st.session_state.qdrant_api_key
+            resolved_key  = st.session_state.api_key
+            resolved_qurl = st.session_state.qdrant_url
+            resolved_qkey = st.session_state.qdrant_api_key
 
             with st.spinner("💾 Saving and indexing your note..."):
                 qclient = get_qdrant_client(resolved_qurl, resolved_qkey)
