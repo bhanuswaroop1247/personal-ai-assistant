@@ -16,7 +16,7 @@ from agent.response_parser import parse_response
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Personal AI Execution Assistant",
+    page_title="Executa",
     page_icon="🤖",
     layout="centered",
 )
@@ -48,7 +48,7 @@ if "indexed_count" not in st.session_state:
     st.session_state.indexed_count = 0
 
 # ── Header ────────────────────────────────────────────────────────────────────
-st.title("🤖 Personal AI Execution Assistant")
+st.title("⚡ Executa")
 st.markdown("*AI-powered decision support for knowledge workers*")
 
 st.markdown(
@@ -438,4 +438,4 @@ with tab_notes:
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("---")
-st.caption("Personal AI Execution Assistant · Powered by Google Gemini + Qdrant · Python 3.13")
+st.caption("Executa · Powered by Google Gemini + Qdrant · Python 3.13")

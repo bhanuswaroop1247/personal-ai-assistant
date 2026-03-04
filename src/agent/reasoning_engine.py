@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 # ── Prompt template ───────────────────────────────────────────────────────────
 
-SYSTEM_ROLE = """You are a Personal AI Execution Assistant.
+SYSTEM_ROLE = """You are Executa, an AI execution assistant.
 Your role is to analyze a knowledge worker's PARA-structured knowledge base \
 and recommend the single most valuable next action they should take right now."""
 

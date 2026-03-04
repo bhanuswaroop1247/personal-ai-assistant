@@ -1,6 +1,6 @@
-# Personal AI Execution Assistant
+# Executa
 
-A Streamlit app that reads your [PARA](https://fortelabs.com/blog/para/)-structured knowledge base, indexes it semantically with Qdrant, and uses Google Gemini to recommend your single most valuable next action.
+An AI execution assistant that reads your [PARA](https://fortelabs.com/blog/para/)-structured knowledge base, indexes it semantically with Qdrant, and uses Google Gemini to recommend your single most valuable next action.
 
 ## Features
 
@@ -24,7 +24,7 @@ A Streamlit app that reads your [PARA](https://fortelabs.com/blog/para/)-structu
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/<your-username>/personal-ai-assistant.git
+git clone https://github.com/bhanuswaroop1247/personal-ai-assistant.git
 cd personal-ai-assistant
 python -m venv venv
 source venv/Scripts/activate   # Windows
